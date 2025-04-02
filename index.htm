@@ -170,18 +170,18 @@
             showPage('document-container');
         });
 
-        function generateDocumentCode() {
+     function generateDocumentCode() {
     const tipo = document.getElementById("document-type").value;
     const departamento = document.getElementById("department").value;
     const unidade = document.getElementById("unit").value;
 
-   fetch(`https://script.google.com/macros/s/AKfycbxyIt5usgRbu_1SNVP1RM-F52kEYbrYu84On1pfrdB9EaFvgWCEpdnmQyO0ns2FWZiZgQ/exec?tipo=${tipo}&departamento=${departamento}&unidade=${unidade}`)
-                        .then(response => response.text())
-                        .then(data => {
-                            document.getElementById("document-code").value = data;
-                        })
-                        .catch(error => console.error("Erro ao buscar código:", error));
-                }
+    fetch(https://script.google.com/macros/s/AKfycbwUhdLgGivomQGjNMADU36vTaZgvcV6KpheUboc6ORd_gQ9nZPxa9dFeOy0oNeR7VPZ6A/exec=${tipo}&departamento=${departamento}&unidade=${unidade}`)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("document-code").value = data;
+        })
+        .catch(error => console.error("Erro ao buscar código:", error));
+}
 
     </script>
 </body>
