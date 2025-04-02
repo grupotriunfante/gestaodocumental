@@ -1,87 +1,247 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIG - Controle Documental</title>
+    <title>Gestão Documental</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            flex-direction: column;
         }
         .container {
             background: white;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
             text-align: center;
         }
-        input {
-            width: 100%;
+        h2 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input, select, button {
             padding: 10px;
-            margin: 10px 0;
+            margin-top: 5px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 4px;
         }
         button {
-            width: 100%;
-            padding: 10px;
-            background: #007bff;
+            background-color: #28a745;
             color: white;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
         button:hover {
-            background: #0056b3;
+            background-color: #218838;
         }
-        .links {
-            margin-top: 10px;
-        }
-        .links a {
-            text-decoration: none;
-            color: #007bff;
+        .hidden {
+            display: none;
         }
     </style>
-    <script>
-        function validarEmail(email) {
-            const dominiosPermitidos = ["triunfante", "milenio", "arrojito", "Aba"];
-            const regex = new RegExp(`^[a-zA-Z0-9._%+-]+@(${dominiosPermitidos.join('|')})\\.com$`);
-            return regex.test(email);
-        }
-        
-        function validarFormulario() {
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
-            
-            if (!validarEmail(email)) {
-                alert('O e-mail deve pertencer a um dos domínios permitidos (@triunfante, @milenio, @arrojito, @Aba).');
-                return false;
-            }
-            if (senha.length < 6) {
-                alert('A senha deve ter pelo menos 6 caracteres.');
-                return false;
-            }
-            return true;
-        }
-    </script>
 </head>
 <body>
-    <div class="container">
-        <h2>SIG - Controle Documental</h2>
-        <form onsubmit="return validarFormulario()">
-            <input type="text" id="email" placeholder="Usuário (ex: nome@triunfante.com)" required>
-            <input type="password" id="senha" placeholder="Senha" required>
+    <div class="container" id="login-container">
+        <h2>Login</h2>
+        <form id="login-form">
+            <label for="username">Usuário:</label>
+            <input type="text" id="username" required>
+            
+            <label for="password">Senha:</label>
+            <input type="password" id="password" required>
+            
             <button type="submit">Entrar</button>
+            <button type="button" id="forgot-password">Esqueci a senha</button>
+            <button type="button" id="register">Cadastro</button>
         </form>
-        <div class="links">
-            <a href="#">Criar novo usuário</a> | 
-            <a href="#">Esqueci a senha</a>
-        </div>
     </div>
+
+    <div class="container hidden" id="document-container">
+        <h2>Gestão Documental</h2>
+        <button onclick="showPage('register-document')">Cadastrar Documento</button>
+        <button onclick="showPage('update-document')">Atualizar Documento</button>
+    </div>
+
+    <div class="container hidden" id="register-document">
+        <h2>Cadastro de Documento</h2>
+        <form id="document-form">
+            <label for="document-type">Tipo de Documento:</label>
+            <select id="document-type" onchange="generateDocumentCode()">
+                <option value="POP">Procedimento Operacional Padrão</option>
+                <option value="Checklist">Checklist</option>
+                <option value="IT">Instrução de Trabalho</option>
+                <option value="BPM">BPM</option>
+                <option value="Procedimento">Procedimento</option>
+                <option value="FPSOL">Folha Padrão S.O.L</option>
+                <option value="Tabela">Tabela</option>
+                <option value="Formulario">Formulário</option>
+            </select>
+            
+            <label for="department">Departamento:</label>
+            <select id="department" onchange="generateDocumentCode()">
+                <option value="LOG">Logística</option>
+                <option value="ADM">Administrativo</option>
+                <option value="COM">Comercial</option>
+                <option value="FIN">Financeiro</option>
+                <option value="JUR">Jurídico</option>
+                <option value="VEND">Vendas</option>
+                <option value="GP">Gestão de Processos</option>
+                <option value="RH">Recursos Humanos</option>
+                <option value="CONT">Contabilidade</option>
+            </select>
+            
+            <label for="unit">Unidade:</label>
+            <select id="unit" onchange="generateDocumentCode()">
+                <option value="MCD">MCD</option>
+                <option value="TCG">TCG</option>
+                <option value="TCV">TCV</option>
+                <option value="ABC">ABC</option>
+                <option value="TPA">TPA</option>
+                <option value="TBA">TBA</option>
+                <option value="TPH">TPH</option>
+                <option value="API">API</option>
+                <option value="TSJ">TSJ</option>
+                <option value="TBL">TBL</option>
+                <option value="TCA">TCA</option>
+                <option value="GERAL">Geral</option>
+            </select>
+            
+            
+            <label for="document-code">Código do Documento:</label>
+            <input type="text" id="document-code" readonly>
+            
+            <label for="author">Autor:</label>
+            <input type="text" id="author" required>
+            
+            <label for="document-file">Anexar Documento:</label>
+<input type="file" id="document-file" accept=".pdf,.docx,.xlsx,.txt">
+
+<script>
+async function saveToGoogleSheets(documentCode) {
+    const webhookURL = "https://drive.google.com/drive/folders/1ETcFc1y5yFCVWW-RezUjnAf9pRasthSR?usp=sharing";
+    const fileInput = document.getElementById("document-file");
+    let fileData = null;
+    let fileType = "";
+    let fileName = "";
+
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        fileType = file.type;
+        fileName = file.name;
+
+        const reader = new FileReader();
+        fileData = await new Promise(resolve => {
+            reader.onloadend = () => resolve(reader.result.split(",")[1]); // Pega apenas a parte Base64
+            reader.readAsDataURL(file);
+        });
+    }
+
+    const data = {
+        department: document.getElementById("department").value,
+        documentType: document.getElementById("document-type").value,
+        unit: document.getElementById("unit").value,
+        documentCode: documentCode,
+        author: document.getElementById("author").value,
+        file: fileData,
+        fileType: fileType,
+        fileName: fileName
+    };
+
+    try {
+        const response = await fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.text();
+        console.log("Resposta do servidor:", result);
+        alert("Documento salvo com sucesso!");
+    } catch (error) {
+        console.error("Erro ao salvar:", error);
+        alert("Erro ao salvar documento.");
+    }
+}
+</script>
+
+            
+            <button type="reset">Reset</button>
+            <button type="submit">Enviar para Aprovação</button>
+            <button type="button" onclick="showPage('document-container')">Voltar</button>
+            
+            
+        </form>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.container').forEach(container => {
+                container.classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            showPage('document-container');
+        });
+
+        async function saveToGoogleSheets(documentCode) {
+    const webhookURL = "1ETcFc1y5yFCVWW-RezUjnAf9pRasthSR";  
+
+    const data = {
+        department: document.getElementById("department").value,
+        documentType: document.getElementById("document-type").value,
+        unit: document.getElementById("unit").value,
+        documentCode: documentCode,
+        author: document.getElementById("author").value
+    };
+
+    try {
+        const response = await fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.text();
+        console.log("Resposta do servidor:", result);
+        alert("Documento salvo com sucesso!");
+    } catch (error) {
+        console.error("Erro ao salvar:", error);
+        alert("Erro ao salvar documento.");
+    }
+}
+
+function generateDocumentCode() {
+    const department = document.getElementById("department").value;
+    const documentType = document.getElementById("document-type").value;
+    const unit = document.getElementById("unit").value;
+
+    let documentNumber = Math.floor(Math.random() * 900 + 100);  
+    const documentCode = `${department}-${documentType}-${documentNumber}-${unit}`;
+
+    document.getElementById("document-code").value = documentCode;
+
+    saveToGoogleSheets(documentCode);
+}
+
+    </script>
 </body>
 </html>
